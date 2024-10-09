@@ -1,0 +1,1 @@
+import{_ as s,c as o,a as t,o as a}from"./index-Cpa6SpQH.js";const r={},c={class:"about"};function n(_,e){return a(),o("div",c,e[0]||(e[0]=[t("h1",null,"This is where the map should go",-1)]))}const l=s(r,[["render",n]]);export{l as default};
