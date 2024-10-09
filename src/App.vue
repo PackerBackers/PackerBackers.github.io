@@ -9,7 +9,9 @@
       </ul>
     </nav>
 
-    <RouterView />
+    <div class="content">
+      <RouterView />
+    </div>
   </div>
 </template>
 
@@ -28,15 +30,17 @@ import { RouterLink, RouterView } from 'vue-router'
 .navbar {
   background-color: #333;
   padding: 0.5rem 1rem;
+  width: 100%;       /* Ensures the navbar spans the full width */
 }
 
 .nav-links {
   list-style: none;
   display: flex;
+  justify-content: center;  /* Centers the navigation links */
 }
 
 .nav-links li {
-  margin-right: 1rem;
+  margin: 0 1rem;  /* Spacing between links */
 }
 
 .nav-links li a {
@@ -51,5 +55,18 @@ import { RouterLink, RouterView } from 'vue-router'
 /* Active link styling */
 .nav-links li a.router-link-exact-active {
   font-weight: bold;
+}
+
+/* Optional: Make the navbar fixed at the top */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* Adjust the content to not be hidden under the fixed navbar */
+.content {
+  margin-top: 3rem; /* Adjust this value to match the navbar height */
 }
 </style>
