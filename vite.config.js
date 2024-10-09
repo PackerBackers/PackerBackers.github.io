@@ -7,9 +7,9 @@ export default defineConfig({
   base: "/PackerBackers.github.io/",
   plugins: [vue()],
   resolve: {
-    alias: [
-
-    ]
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
-})
+});
 
