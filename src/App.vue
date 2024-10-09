@@ -1,55 +1,18 @@
-<template>
-  <div>
-    <nav class="navbar">
-      <ul class="nav-links">
-        <li><RouterLink to="/">Home</RouterLink></li>
-        <li><RouterLink to="/maps">Map</RouterLink></li>
-        <li><RouterLink to="/friends">Friends</RouterLink></li>
-        <li><RouterLink to="/chats">Chat</RouterLink></li>
-      </ul>
-    </nav>
-
-    <RouterView />
-  </div>
-</template>
-
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+// Import the header, footer, and main content components
+import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
 </script>
 
+<template>
+  <!-- Use the header, main content, and footer components -->
+  <Header />
+  <main class="container my-5">
+    <RouterView />
+  </main>
+  <Footer />
+</template>
+
 <style scoped>
-/* Basic reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.navbar {
-  background-color: #333;
-  padding: 0.5rem 1rem;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-}
-
-.nav-links li {
-  margin-right: 1rem;
-}
-
-.nav-links li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.nav-links li a:hover {
-  text-decoration: underline;
-}
-
-/* Active link styling */
-.nav-links li a.router-link-exact-active {
-  font-weight: bold;
-}
+/* You can add global styles here if necessary */
 </style>
