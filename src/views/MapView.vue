@@ -1,6 +1,6 @@
 <template>
     <div class="about">
-      <h1>This is where the chat page should go</h1>
+      <h1>This is where the map should go</h1>
     </div>
   </template>
   
