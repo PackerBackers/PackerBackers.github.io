@@ -25,12 +25,12 @@ import HelloWorld from './components/HelloWorld.vue'
 <style scoped>
 header {
   line-height: 1.5;
-  max-height: 100vh;
+  /* Removed max-height to prevent unnecessary expansion */
 }
 
 .logo {
   display: block;
-  margin: 0 auto 2rem;
+  margin: 0 1rem 0 0; /* Adjusted margin for better alignment */
 }
 
 nav {
@@ -61,18 +61,14 @@ nav a:first-of-type {
 @media (min-width: 1024px) {
   header {
     display: flex;
-    place-items: center;
+    align-items: center; /* Corrected from place-items */
     padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
   }
 
   header .wrapper {
     display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    align-items: center; /* Corrected from place-items */
+    flex-wrap: nowrap;   /* Prevent wrapping to new lines */
   }
 
   nav {
@@ -80,8 +76,8 @@ nav a:first-of-type {
     margin-left: -1rem;
     font-size: 1rem;
 
-    padding: 1rem 0;
-    margin-top: 1rem;
+    padding: 0.5rem 0; /* Reduced padding */
+    margin-top: 0;     /* Removed margin-top to reduce height */
   }
 }
 </style>
