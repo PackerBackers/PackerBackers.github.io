@@ -1,23 +1,34 @@
-import readlineSync from "readline-sync";
+// One could move the initial message to the HTML file. 
+// Is first/second better than 0/1?
+const player = ["One", "Two"];
+printChocolateBar(createChocolateBar(6, 7), 0, player);
+// Print message player [0] turn to select
+document.getElementById("message").innerText = `Player ${ player [0] } turn to select!`;
 
-// input takes a prompt and returns the user's input
-function input(prompt) {
-  return readlineSync.question(prompt);
+
+// Prints the chocolate bar to the screen
+function printChocolateBar(gameboard, turn, player) {
+  const gameboardHolder = document.getElementById("gameboardHolder");
+  gameboardHolder.innerHTML = "";
+  for (let i = 0; i < gameboard.length; i += 1) {
+    const divrow = document.createElement("div");
+    divrow.setAttribute("class", "row");
+    for (let j = 0; j < gameboard[i].length; j += 1) {
+      const divblock = document.createElement("div");
+      divblock.innerHTML = gameboard[i][j];
+      divrow.appendChild(divblock);
+      divblock.addEventListener("click", () => {
+        selectBlock(gameboard, i, j, turn, player);
+      });
+    }
+    gameboardHolder.appendChild(divrow);
+  }
 }
 
-const answer = input("Want to play a game? ");
-if (answer === "yes") {
-  console.log("Great!");
-} else {
-  console.log("Oh, well, too bad.");
-}
-
-// creates a row x col matrix
+// Creates a chocolate bar with the dimensions row x col
 function createChocolateBar(row, col) {
-  const chocolateBar = [];
-  // if row or col is less than 1, return undefined
+  const bar = [];
   if (row < 1 || col < 1) return undefined;
-  // create a row x col matrix and fill it with numbers and a P
   for (let i = 0; i < row; i += 1) {
     const list = [];
     for (let j = 0; j < col; j += 1) {
@@ -27,87 +38,52 @@ function createChocolateBar(row, col) {
         list.push((i + 1).toString() + (j + 1).toString());
       }
     }
-    chocolateBar.push(list);
+    bar.push(list);
   }
-  return chocolateBar;
+  return bar;
 }
 
-function printChocolateBar(chocolateBar) {
-  // if the chocolate bar is undefined, return undefined
-  if (chocolateBar === undefined) return undefined;
-  // print the chocolate bar
-  for (let i = 0; i < chocolateBar.length; i += 1) {
-    console.log(chocolateBar[i].join(" "));
+// If only the P is left, the player who last took their turn wins.
+function checkWinner(bar) {
+  if (bar.length === 1) {
+    if (bar[0].length === 1) {
+      return true;
+    }
   }
+  return false;
 }
 
-function chomp(chocolateBar, row, col) {
-  const new_chocolateBar1 = [];
-  for (let i = 0; i < chocolateBar.length; i += 1) {
-    let list = chocolateBar[i];
+// Chomps the chocolate bar at row x col
+function chomp(bar, row, col) {
+  const newBar = [];
+  for (let i = 0; i < bar.length; i += 1) {
+    let list = bar[i];
     for (let j = 0; j < list.length; j += 1) {
       if (i >= row) {
         list = list.splice(0, col);
       }
     }
-    if (list.length > 0) {
-      new_chocolateBar1.push(list);
+    if (list.length !== 0) {
+      newBar.push(list);
     }
   }
-  return new_chocolateBar1;
+  return newBar;
 }
 
-function checkWinner(chocolateBar) {
-  if (chocolateBar.length === 1 && chocolateBar[0].length === 1) {
-    return true;
-  }
-  return false;
-}
-
-function askCellNumber(chocolateBar) {
-  const run = true;
-  while (run) {
-    const inputString = input("Which cell do you want to eat? ");
-    const row = parseInt(inputString[0], 10) - 1;
-    const col = parseInt(inputString[1], 10) - 1;
-    if (row >= 0 && col >= 0) {
-      if (row < chocolateBar.length && inputString !== "11") {
-        if (col < chocolateBar[row].length) {
-          return [row, col];
-        }
-      }
-    }
-    console.log("Invalid input. Try again.");
-  }
-  return [0, 0];
-}
-
-function main() {
-  let player1 = true;
-  let row = 0;
-  let col = 0;
-  let chocolateBar = createChocolateBar(6, 7);
-
-  console.log(
-    "Welcome to Chomp! The goal of the game is to eat the entire chocolate bar."
-  );
-
-  while (!checkWinner(chocolateBar)) {
-    printChocolateBar(chocolateBar);
-    if (player1) {
-      console.log("Player 1's turn.");
-      player1 = false;
+function selectBlock(gameboard, row, col, turn, player) {
+  if (!(row === 0 && col === 0)) {
+    const bar = chomp(gameboard, row, col);
+    printChocolateBar(bar, turn + 1, player);
+    // Either someone wins or next players turn
+    if (checkWinner(bar)) {
+      printChocolateBar(chomp(gameboard, 0, 0), turn, player);
+      document.getElementById("message").innerText = `The winner is player ${player[turn % 2]}!`;
     } else {
-      console.log("Player 2's turn.");
-      player1 = true;
+      document.getElementById("message").innerText = `Player ${player[(turn + 1) % 2]} turn to select!`;
     }
-    const [row, col] = askCellNumber(chocolateBar);
-    chocolateBar = chomp(chocolateBar, row, col);
-  }
-  if (player1) {
-    console.log("Player 2 wins!");
-  } else {
-    console.log("Player 1 wins!");
   }
 }
-main();
+
+
+
+

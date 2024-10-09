@@ -1,0 +1,18 @@
+body {
+  background: #b1b1b1;
+  color: #000000;
+}
+
+.row div {
+  background: #8d3d2b;
+  color: #94aab7;
+  padding: 2px;
+  border: 2px outset;
+  height: 24px;
+  width: 24px;
+  float: left;
+}
+
+.row {
+  clear: both;
+}
