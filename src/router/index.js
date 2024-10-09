@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
+// Uppdatera routes: i denna fil när ni lägger till en ny sida.
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL), // Use createWebHashHistory
   routes: [
@@ -10,9 +10,14 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
+      path: '/friends',
+      name: 'friends',
+      component: () => import('../views/FriendsView.vue')
+    },
+    {
+      path: '/chats',
+      name: 'chat',
+      component: () => import('../views/ChatsView.vue')
     }
   ]
 })
