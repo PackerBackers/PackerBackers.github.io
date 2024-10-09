@@ -1,1 +1,115 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack Back</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Styling the body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        /* Container for the page */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* Header styling */
+        header {
+            background-color: #4CAF50;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        /* Main content styling */
+        main {
+            margin: 20px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Example button style */
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        /* Example input fields */
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Centered form */
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Pack Back</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Welcome to Pack Back!</h2>
+            <p>This is a social web service where you can connect with friends, share updates, and stay in the loop.</p>
+
+            <div class="login-form">
+                <h3>Login to Your Account</h3>
+                <form>
+                    <input type="text" placeholder="Username" required><br>
+                    <input type="password" placeholder="Password" required><br>
+                    <a href="#" class="btn">Login</a>
+                </form>
+                <p>Don't have an account? <a href="#">Sign up now</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Pack Back. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
