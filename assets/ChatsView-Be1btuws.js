@@ -1,1 +1,0 @@
-import{_ as s,c as t,a as o,o as a}from"./index-Cpa6SpQH.js";const c={},r={class:"about"};function n(_,e){return a(),t("div",r,e[0]||(e[0]=[o("h1",null,"This is where the chat page should go",-1)]))}const l=s(c,[["render",n]]);export{l as default};
