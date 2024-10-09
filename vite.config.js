@@ -4,12 +4,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  base: "/PackerBackers.github.io/",
   plugins: [vue()],
+  base: '/PackerBackers.github.io/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
 });
+
 
