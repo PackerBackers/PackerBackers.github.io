@@ -1,83 +1,55 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div>
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><RouterLink to="/">Home</RouterLink></li>
+        <li><RouterLink to="/maps">Map</RouterLink></li>
+        <li><RouterLink to="/friends">Friends</RouterLink></li>
+        <li><RouterLink to="/chats">Chat</RouterLink></li>
+      </ul>
+    </nav>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/maps">Map</RouterLink>
-        <RouterLink to="/friends">Friends</RouterLink>
-        <RouterLink to="/chats">Chat</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    <RouterView />
+  </div>
 </template>
 
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  /* Removed max-height to prevent unnecessary expansion */
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  display: block;
-  margin: 0 1rem 0 0; /* Adjusted margin for better alignment */
+.navbar {
+  background-color: #333;
+  padding: 0.5rem 1rem;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.nav-links {
+  list-style: none;
+  display: flex;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.nav-links li {
+  margin-right: 1rem;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.nav-links li a:hover {
+  text-decoration: underline;
 }
 
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    align-items: center; /* Corrected from place-items */
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    align-items: center; /* Corrected from place-items */
-    flex-wrap: nowrap;   /* Prevent wrapping to new lines */
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 0.5rem 0; /* Reduced padding */
-    margin-top: 0;     /* Removed margin-top to reduce height */
-  }
+/* Active link styling */
+.nav-links li a.router-link-exact-active {
+  font-weight: bold;
 }
 </style>
