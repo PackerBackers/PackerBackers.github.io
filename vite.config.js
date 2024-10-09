@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   base: "/PackerBackers.github.io/",
-  plugins: [],
+  plugins: [vue()],
   resolve: {
     alias: [
 
