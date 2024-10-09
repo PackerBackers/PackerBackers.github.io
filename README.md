@@ -1,29 +1,7 @@
 # PackBack
 
-This template should help get you started developing with Vue 3 in Vite.
+To deploy, just push to the main branch and github workflows will take care of the rest.
 
-## Recommended IDE Setup
+## Development
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+When developing new pages, make sure to update both App.vue and router/index.js. with your changes. Otherwise the page will not be accessible.
