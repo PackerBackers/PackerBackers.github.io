@@ -1,5 +1,6 @@
 <template>
   <div class="map-container">
+    <!-- The Map Element -->
     <div id="map"></div>
   </div>
 </template>
@@ -23,15 +24,16 @@ export default {
 
 <style scoped>
 .map-container {
-  height: 400px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  height: calc(100vh - 50px); /* Full height minus the navbar height */
+  width: 100vw;
 }
 
 #map {
   height: 100%;
   width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>

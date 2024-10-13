@@ -1,22 +1,42 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router';
 </script>
 
 <template>
-  <!-- Responsive Header with Navigation using Bootstrap classes -->
-  <header class="bg-dark text-white py-3">
-    <div class="container d-flex justify-content-between align-items-center flex-column flex-md-row">
-      <h1 class="h3 mb-0">PackerBackers.io</h1>
-      <nav class="d-flex flex-column flex-md-row">
-        <RouterLink to="/" class="text-white my-2 my-md-0 mx-md-3">Home</RouterLink>
-        <RouterLink to="/map" class="text-white my-2 my-md-0 mx-md-3">Map</RouterLink>
-        <RouterLink to="/friends" class="text-white my-2 my-md-0 mx-md-3">Friends</RouterLink>
-        <RouterLink to="/chats" class="text-white my-2 my-md-0 mx-md-3">Chat</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <!-- Fixed bottom navigation bar with icons and white text -->
+  <nav class="navbar fixed-bottom navbar-light bg-primary d-flex justify-content-around">
+    <!-- Home link -->
+    <RouterLink to="/" v-slot="{ isActive }" class="text-center">
+      <i :class="['bi bi-house-door-fill', { 'active-icon': isActive }]" style="font-size: 1.5rem;"></i>
+    </RouterLink>
+    <!-- Map link -->
+    <RouterLink to="/map" v-slot="{ isActive }" class="text-center">
+      <i :class="['bi bi-geo-alt-fill', { 'active-icon': isActive }]" style="font-size: 1.5rem;"></i>
+    </RouterLink>
+    <!-- Friends link -->
+    <RouterLink to="/friends" v-slot="{ isActive }" class="text-center">
+      <i :class="['bi bi-people-fill', { 'active-icon': isActive }]" style="font-size: 1.5rem;"></i>
+    </RouterLink>
+    <!-- Chat link -->
+    <RouterLink to="/chats" v-slot="{ isActive }" class="text-center">
+      <i :class="['bi bi-chat-dots-fill', { 'active-icon': isActive }]" style="font-size: 1.5rem;"></i>
+    </RouterLink>
+  </nav>
 </template>
 
 <style scoped>
-/* Add custom styles for the header if needed */
+/* Default white icon color */
+.navbar .text-center {
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Active icon color */
+.active-icon {
+  color: #000; /* Change to black when active */
+}
+
+.navbar .text-center:hover {
+  color: #f0f0f0; /* Slightly lighter hover effect */
+}
 </style>

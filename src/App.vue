@@ -7,10 +7,9 @@ import Footer from './components/Footer.vue'
 <template>
   <!-- Use the header, main content, and footer components -->
   <Header />
-  <main class="container my-5">
+  <main class="container">
     <RouterView />
   </main>
-  <Footer />
 </template>
 
 <style scoped>
