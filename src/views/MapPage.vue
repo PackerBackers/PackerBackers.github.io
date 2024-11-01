@@ -13,7 +13,6 @@ export default {
   name: 'MapPage',
   components: {
     MapComponent,
-    ButtonOverlay,
   },
 };
 </script>
