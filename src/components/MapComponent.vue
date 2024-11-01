@@ -240,6 +240,7 @@ export default {
       groups: [],
       selectedGroupId: null,
       selectedFriendIds: [],
+      markers: {}, // NEW: object to store markers by pin ID
     };
   },
   mounted() {
@@ -264,6 +265,7 @@ export default {
         // Use hardcoded pins if none in localStorage
         this.pins = [
           {
+            id: 1,
             lat: 59.3293,
             lng: 18.0686,
             icon: 'faHouse',
@@ -274,6 +276,7 @@ export default {
             friendIds: [],
           },
           {
+            id: 2,
             lat: 59.3325,
             lng: 18.0649,
             icon: 'faHeart',
@@ -284,6 +287,7 @@ export default {
             friendIds: [],
           },
           {
+            id: 3,
             lat: 59.3346,
             lng: 18.07,
             icon: 'faMugHot',
@@ -340,10 +344,15 @@ export default {
         },
       });
 
+      // Store marker with the pin's ID
+      this.markers[location.id] = marker;
+
       // Display InfoWindow on click
       marker.addListener('click', () => {
         this.openInfoWindow(marker, location);
       });
+
+      return marker; // Return marker in case needed
     },
     openInfoWindow(marker, location) {
       const groupName = this.getGroupNameById(location.groupId);
@@ -363,8 +372,21 @@ export default {
         content += `<p><strong>Friends:</strong> ${friendNames.join(', ')}</p>`;
       }
 
+      content += `<button id="delete-pin-${location.id}" class="btn btn-danger btn-sm">Delete Pin</button>`;
+
       this.infoWindow.setContent(content);
       this.infoWindow.open(this.map, marker);
+
+      // Add event listener for the delete button
+      google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
+        document
+          .getElementById(`delete-pin-${location.id}`)
+          .addEventListener('click', () => {
+            this.deletePin(location.id);
+            window.location.reload(); // Reloads the page after deleting the pin
+
+          });
+      });
     },
     openModal() {
       const modal = new window.bootstrap.Modal(
@@ -384,6 +406,12 @@ export default {
       this.currentMarker.groupId = this.selectedGroupId;
       this.currentMarker.friendIds = this.selectedFriendIds;
 
+      // Assign a unique ID to the new pin
+      const newId = this.pins.length
+        ? Math.max(...this.pins.map((p) => p.id)) + 1
+        : 1;
+      this.currentMarker.id = newId;
+
       // Add the marker to the map and to the pins array
       this.addMarker(this.currentMarker);
       this.pins.push(this.currentMarker);
@@ -401,6 +429,19 @@ export default {
         document.getElementById('nameModal')
       );
       modal.hide();
+    },
+    deletePin(id) {
+      // Remove the pin from the pins array
+      this.pins = this.pins.filter((pin) => pin.id !== id);
+      // Remove the marker from the map
+      if (this.markers[id]) {
+        this.markers[id].setMap(null);
+        delete this.markers[id];
+      }
+      // Save updated pins to localStorage
+      this.savePins();
+      // Close the info window
+      this.infoWindow.close();
     },
     getGroupNameById(groupId) {
       const group = this.groups.find((g) => g.id === groupId);
