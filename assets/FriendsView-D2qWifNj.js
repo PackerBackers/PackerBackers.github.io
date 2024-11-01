@@ -1,1 +1,0 @@
-import{_ as s,c as o,a as t,o as r}from"./index-COQeOF40.js";const n={},a={class:"about"};function c(i,e){return r(),o("div",a,e[0]||(e[0]=[t("h1",null,"This is where the friends page should go",-1)]))}const _=s(n,[["render",c]]);export{_ as default};
