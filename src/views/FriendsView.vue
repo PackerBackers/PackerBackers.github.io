@@ -350,8 +350,8 @@ export default {
 
 .overlay-button {
   position: fixed;
-  bottom: 90px; /* Place just above the navbar */
-  right: 20px;
+  bottom: 70px; /* Place just above the navbar */
+  right: 205px;
   z-index: 100;
   width: 60px;
   height: 60px;
@@ -364,8 +364,8 @@ export default {
 
 .overlay-button-group {
   position: fixed;
-  bottom: 160px; /* Above the add friend button */
-  right: 20px;
+  bottom: 70px; /* Above the add friend button */
+  right: 110px;
   z-index: 100;
   width: 60px;
   height: 60px;

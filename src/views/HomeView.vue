@@ -6,9 +6,8 @@
     </div>
 
     <div class="row gy-4">
-
-            <!-- Section 2: Invite Friends Feature -->
-            <div class="col-lg-6">
+      <!-- Section 1: Invite Friends Feature -->
+      <div class="col-lg-6">
         <div class="card shadow-sm border-0 bg-light-gray h-100">
           <div class="card-body d-flex flex-row">
             <div class="text-start flex-fill">
@@ -22,7 +21,7 @@
         </div>
       </div>
 
-      <!-- Section 1: Map Pinning Feature -->
+      <!-- Section 2: Map Pinning Feature -->
       <div class="col-lg-6">
         <div class="card shadow-sm border-0 bg-light-gray h-100">
           <div class="card-body d-flex flex-row">
@@ -66,24 +65,24 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- Call to Action -->
     <div class="text-center my-5">
-      <button class="btn btn-primary btn-lg fw-bold shadow-sm px-4 py-3" @click="startNow">Get Started with PackerBackers</button>
+      <RouterLink to="/friends">
+        <button class="btn btn-primary btn-lg fw-bold shadow-sm px-4 py-3">
+          Add friends to get started with PackerBackers
+        </button>
+      </RouterLink>
     </div>
   </div>
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
-  methods: {
-    startNow() {
-      // Add navigation or functionality to proceed to the map or sign-up page
-      console.log("Navigating to the main map or registration page...");
-    }
-  }
+  name: 'AboutPage',
 };
 </script>
 
@@ -143,6 +142,16 @@ export default {
   60% {
     transform: translateY(-5px);
   }
+}
+
+/* Button hover effect for better interactivity */
+.text-center button {
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.text-center button:hover {
+  background-color: #0056b3; /* Slightly darker blue on hover */
+  transform: scale(1.05); /* Small scale up on hover */
 }
 
 /* Responsive Design */
