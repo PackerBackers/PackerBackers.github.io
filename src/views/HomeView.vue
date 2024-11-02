@@ -7,6 +7,21 @@
 
     <div class="row gy-4">
 
+            <!-- Section 2: Invite Friends Feature -->
+            <div class="col-lg-6">
+        <div class="card shadow-sm border-0 bg-light-gray h-100">
+          <div class="card-body d-flex flex-row">
+            <div class="text-start flex-fill">
+              <h2 class="card-title fw-bold">Invite Friends & Groups</h2>
+              <p class="card-text text-muted">Plan together effortlessly! Send invites to individuals, close friends, or entire groups, allowing you to tailor each event for the right audience.</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-center animated-icon-container">
+              <i class="bi bi-people-fill display-1 text-secondary animated-icon"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Section 1: Map Pinning Feature -->
       <div class="col-lg-6">
         <div class="card shadow-sm border-0 bg-light-gray h-100">
@@ -17,21 +32,6 @@
             </div>
             <div class="d-flex align-items-center justify-content-center animated-icon-container">
               <i class="bi bi-geo-alt-fill display-1 text-primary animated-icon"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 2: Invite Friends Feature -->
-      <div class="col-lg-6">
-        <div class="card shadow-sm border-0 bg-light-gray h-100">
-          <div class="card-body d-flex flex-row">
-            <div class="text-start flex-fill">
-              <h2 class="card-title fw-bold">Invite Friends & Groups</h2>
-              <p class="card-text text-muted">Plan together effortlessly! Send invites to individuals, close friends, or entire groups, allowing you to tailor each event for the right audience.</p>
-            </div>
-            <div class="d-flex align-items-center justify-content-center animated-icon-container">
-              <i class="bi bi-people-fill display-1 text-secondary animated-icon"></i>
             </div>
           </div>
         </div>
