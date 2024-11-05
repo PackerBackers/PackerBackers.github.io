@@ -1,17 +1,32 @@
 <template>
   <!-- Main container -->
   <div class="chat-view">
-    <!-- Chat Sidebar -->
-    <div class="chat-sidebar">
-      <div class="chat-list">
+    <!-- Group Sidebar -->
+    <div class="group-sidebar">
+      <div class="group-list">
         <div
-          class="chat-card"
-          v-for="chat in chatList"
-          :key="chat.id"
-          :class="{ active: currentChatId === chat.id }"
-          @click="selectChat(chat.id)"
+          class="group-card"
+          v-for="group in groups"
+          :key="group.id"
+          :class="{ active: currentGroupId === group.id }"
+          @click="selectGroup(group.id)"
         >
-          <h3>{{ chat.name }}</h3>
+          <h3>{{ group.name }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Friend Sidebar -->
+    <div class="friend-sidebar" v-if="currentGroup">
+      <div class="friend-list">
+        <div
+          class="friend-card"
+          v-for="friend in friendsInCurrentGroup"
+          :key="friend.id"
+          :class="{ active: currentFriendId === friend.id }"
+          @click="selectChat(friend.id)"
+        >
+          <h4>{{ friend.name }}</h4>
         </div>
       </div>
     </div>
@@ -19,7 +34,7 @@
     <!-- Chat Content -->
     <div class="chat-content">
       <div class="chat-header">
-        <h2>{{ currentChat.name }}</h2>
+        <h2>{{ currentFriend ? currentFriend.name : "Select a friend to chat" }}</h2>
       </div>
       <div class="chat-history">
         <div
@@ -31,7 +46,7 @@
         </div>
       </div>
       <!-- Message Input Field -->
-      <div class="message-input">
+      <div class="message-input" v-if="currentFriend">
         <input
           type="text"
           v-model="newMessage"
@@ -49,59 +64,129 @@ export default {
   name: "ChatView",
   data() {
     return {
-      currentChatId: 1,
+      groups: [],
+      friends: [],
+      chats: {},
+      currentGroupId: null,
+      currentFriendId: null,
       newMessage: "",
-      chatList: [
-        { id: 1, name: "Chat 1" },
-        { id: 2, name: "Chat 2" },
-        { id: 3, name: "Chat 3" },
-      ],
-      chats: {
-        1: {
-          id: 1,
-          name: "Chat 1",
-          messages: [
-            { sender: "user", text: "Hi there!" },
-            { sender: "bot", text: "Hello! How can I assist you today?" },
-          ],
-        },
-        2: {
-          id: 2,
-          name: "Chat 2",
-          messages: [
-            { sender: "user", text: "Can you tell me a joke?" },
-            { sender: "bot", text: "Sure! Here's one for you..." },
-          ],
-        },
-        3: {
-          id: 3,
-          name: "Chat 3",
-          messages: [
-            { sender: "user", text: "What is the capital of France?" },
-            { sender: "bot", text: "The capital of France is Paris." },
-          ],
-        },
-      },
     };
   },
+  created() {
+    this.loadData();
+    if (this.groups.length > 0) {
+      this.currentGroupId = this.groups[0].id;
+    }
+  },
   computed: {
+    currentGroup() {
+      return this.groups.find((group) => group.id === this.currentGroupId);
+    },
+    friendsInCurrentGroup() {
+      return this.friends.filter(
+        (friend) => friend.groupId === this.currentGroupId
+      );
+    },
+    currentFriend() {
+      return this.friends.find(
+        (friend) => friend.id === this.currentFriendId
+      );
+    },
     currentChat() {
-      return this.chats[this.currentChatId];
+      return this.chats[this.currentFriendId] || { messages: [] };
     },
   },
   methods: {
-    selectChat(chatId) {
-      this.currentChatId = chatId;
+    loadData() {
+      // Load groups and friends from localStorage
+      const storedGroups = JSON.parse(localStorage.getItem("groups"));
+      const storedFriends = JSON.parse(localStorage.getItem("friends"));
+
+      if (storedGroups && storedFriends) {
+        this.groups = storedGroups;
+        this.friends = storedFriends;
+      } else {
+        // Use default data if none found
+        this.groups = [
+          { id: 1, name: "Family" },
+          { id: 2, name: "Work" },
+        ];
+        this.friends = [
+          { id: 1, name: "Alice", groupId: 1, isBestFriend: true },
+          { id: 2, name: "Bob", groupId: 2, isBestFriend: false },
+          { id: 3, name: "Charlie", groupId: 1, isBestFriend: false },
+        ];
+      }
+
+      // Load chats from localStorage or initialize
+      const storedChats = JSON.parse(localStorage.getItem("chats"));
+      if (storedChats) {
+        this.chats = storedChats;
+      } else {
+        // Initialize chats for each friend
+        this.friends.forEach((friend) => {
+          this.chats[friend.id] = {
+            messages: [
+              {
+                sender: "bot",
+                text: `Start chatting with ${friend.name}!`,
+              },
+            ],
+          };
+        });
+      }
+    },
+    saveChats() {
+      localStorage.setItem("chats", JSON.stringify(this.chats));
+    },
+    selectGroup(groupId) {
+      this.currentGroupId = groupId;
+      // Reset current friend
+      this.currentFriendId = null;
+    },
+    selectChat(friendId) {
+      this.currentFriendId = friendId;
     },
     sendMessage() {
       if (this.newMessage.trim() !== "") {
+        // Add the new message to the current chat
         this.currentChat.messages.push({
           sender: "user",
           text: this.newMessage.trim(),
         });
         this.newMessage = "";
-        // Optionally, add bot response logic here
+        // Save chats to localStorage
+        this.saveChats();
+        // Scroll to the bottom of the chat history
+        this.$nextTick(() => {
+          const chatHistory = this.$el.querySelector(".chat-history");
+          chatHistory.scrollTop = chatHistory.scrollHeight;
+        });
       }
+    },
+  },
+  watch: {
+    friends(newFriends) {
+      // Update chats for any new friends
+      newFriends.forEach((friend) => {
+        if (!this.chats[friend.id]) {
+          this.chats[friend.id] = {
+            messages: [
+              {
+                sender: "bot",
+                text: `Start chatting with ${friend.name}!`,
+              },
+            ],
+          };
+        }
+      });
+      // Remove chats for any friends that have been deleted
+      Object.keys(this.chats).forEach((friendId) => {
+        if (!newFriends.find((friend) => friend.id == friendId)) {
+          delete this.chats[friendId];
+        }
+      });
+      this.saveChats();
     },
   },
 };
@@ -116,30 +201,58 @@ export default {
   overflow: hidden;
 }
 
-/* Chat Sidebar */
-.chat-sidebar {
-  width: 250px;
+/* Group Sidebar */
+.group-sidebar {
+  width: 200px;
   background-color: #f8f9fa;
   overflow-y: auto;
   padding: 20px;
 }
 
-.chat-list {
+.group-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.chat-card {
+.group-card {
   background-color: #ffffff;
-  padding: 15px;
+  padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+  text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.chat-card.active {
+.group-card.active {
   background-color: #e9ecef;
+}
+
+/* Friend Sidebar */
+.friend-sidebar {
+  width: 200px;
+  background-color: #e9ecef;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.friend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.friend-card {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.friend-card.active {
+  background-color: #dee2e6;
 }
 
 /* Chat Content */
