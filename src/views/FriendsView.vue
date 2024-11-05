@@ -298,7 +298,7 @@ export default {
 <style scoped>
 .friends-view {
   position: relative;
-  height: calc(1500px); /* Adjust if you have a navbar/footer */
+  height: calc(1000px); /* Adjust if you have a navbar/footer */
   width: 100vw;
   padding: 20px;
   overflow-y: auto;

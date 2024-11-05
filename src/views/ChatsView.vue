@@ -1,40 +1,72 @@
 <template>
   <!-- Main container -->
   <div class="chat-view">
-    <!-- Group Sidebar -->
-    <div class="group-sidebar">
-      <div class="group-list">
-        <div
-          class="group-card"
-          v-for="group in groups"
-          :key="group.id"
-          :class="{ active: currentGroupId === group.id }"
-          @click="selectGroup(group.id)"
-        >
-          <h3>{{ group.name }}</h3>
+    <!-- Sidebars (conditionally rendered) -->
+    <div v-if="isSidebarVisible" class="sidebar-container">
+      <!-- Group Sidebar -->
+      <div class="group-sidebar">
+        <div class="group-list">
+          <div
+            class="group-card"
+            v-for="group in groups"
+            :key="group.id"
+            :class="{ active: currentGroupId === group.id }"
+            @click="selectGroup(group.id)"
+          >
+            <h3>{{ group.name }}</h3>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Friend Sidebar -->
-    <div class="friend-sidebar" v-if="currentGroup">
-      <div class="friend-list">
-        <div
-          class="friend-card"
-          v-for="friend in friendsInCurrentGroup"
-          :key="friend.id"
-          :class="{ active: currentFriendId === friend.id }"
-          @click="selectChat(friend.id)"
-        >
-          <h4>{{ friend.name }}</h4>
+      <!-- Friend Sidebar -->
+      <div class="friend-sidebar" v-if="currentGroup">
+        <div class="friend-list">
+          <!-- Group Chat Option -->
+          <div
+            class="friend-card group-chat"
+            :class="{
+              active:
+                currentChatType === 'group' && currentGroupId === currentGroup.id,
+            }"
+            @click="selectGroupChat(currentGroup.id)"
+          >
+            <h4>Group Chat</h4>
+          </div>
+          <!-- Individual Friends -->
+          <div
+            class="friend-card"
+            v-for="friend in friendsInCurrentGroup"
+            :key="friend.id"
+            :class="{
+              active:
+                currentChatType === 'friend' && currentFriendId === friend.id,
+            }"
+            @click="selectChat(friend.id)"
+          >
+            <h4>{{ friend.name }}</h4>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Chat Content -->
-    <div class="chat-content">
+    <div class="chat-content" :class="{ fullWidth: !isSidebarVisible }">
+      <!-- Chat Header -->
       <div class="chat-header">
-        <h2>{{ currentFriend ? currentFriend.name : "Select a friend to chat" }}</h2>
+        <button class="back-button" @click="goBack" v-if="!isSidebarVisible">
+          &larr; Back
+        </button>
+        <h2>
+          <template v-if="currentChatType === 'friend'">
+            {{ currentFriend ? currentFriend.name : "Select a friend to chat" }}
+          </template>
+          <template v-else-if="currentChatType === 'group'">
+            {{ currentGroup ? currentGroup.name : "Select a group to chat" }}
+          </template>
+          <template v-else>
+            Select a friend or group to chat
+          </template>
+        </h2>
       </div>
       <div class="chat-history">
         <div
@@ -46,7 +78,7 @@
         </div>
       </div>
       <!-- Message Input Field -->
-      <div class="message-input" v-if="currentFriend">
+      <div class="message-input" v-if="currentChatType">
         <input
           type="text"
           v-model="newMessage"
@@ -69,7 +101,9 @@ export default {
       chats: {},
       currentGroupId: null,
       currentFriendId: null,
+      currentChatType: null, // 'friend' or 'group'
       newMessage: "",
+      isSidebarVisible: true,
     };
   },
   created() {
@@ -93,7 +127,16 @@ export default {
       );
     },
     currentChat() {
-      return this.chats[this.currentFriendId] || { messages: [] };
+      if (this.currentChatType === "friend") {
+        return (
+          this.chats["friend-" + this.currentFriendId] || { messages: [] }
+        );
+      } else if (this.currentChatType === "group") {
+        return (
+          this.chats["group-" + this.currentGroupId] || { messages: [] }
+        );
+      }
+      return { messages: [] };
     },
   },
   methods: {
@@ -125,11 +168,22 @@ export default {
       } else {
         // Initialize chats for each friend
         this.friends.forEach((friend) => {
-          this.chats[friend.id] = {
+          this.chats["friend-" + friend.id] = {
             messages: [
               {
                 sender: "bot",
                 text: `Start chatting with ${friend.name}!`,
+              },
+            ],
+          };
+        });
+        // Initialize chats for each group
+        this.groups.forEach((group) => {
+          this.chats["group-" + group.id] = {
+            messages: [
+              {
+                sender: "bot",
+                text: `Start group chat with ${group.name}!`,
               },
             ],
           };
@@ -141,11 +195,20 @@ export default {
     },
     selectGroup(groupId) {
       this.currentGroupId = groupId;
-      // Reset current friend
+      // Reset current friend and chat type
       this.currentFriendId = null;
+      this.currentChatType = null;
+    },
+    selectGroupChat(groupId) {
+      this.currentGroupId = groupId;
+      this.currentFriendId = null;
+      this.currentChatType = "group";
+      this.isSidebarVisible = false; // Hide sidebar
     },
     selectChat(friendId) {
       this.currentFriendId = friendId;
+      this.currentChatType = "friend";
+      this.isSidebarVisible = false; // Hide sidebar
     },
     sendMessage() {
       if (this.newMessage.trim() !== "") {
@@ -160,17 +223,24 @@ export default {
         // Scroll to the bottom of the chat history
         this.$nextTick(() => {
           const chatHistory = this.$el.querySelector(".chat-history");
-          chatHistory.scrollTop = chatHistory.scrollHeight;
+          if (chatHistory) {
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+          }
         });
       }
+    },
+    goBack() {
+      this.isSidebarVisible = true;
+      this.currentChatType = null;
+      this.currentFriendId = null;
     },
   },
   watch: {
     friends(newFriends) {
       // Update chats for any new friends
       newFriends.forEach((friend) => {
-        if (!this.chats[friend.id]) {
-          this.chats[friend.id] = {
+        if (!this.chats["friend-" + friend.id]) {
+          this.chats["friend-" + friend.id] = {
             messages: [
               {
                 sender: "bot",
@@ -181,9 +251,41 @@ export default {
         }
       });
       // Remove chats for any friends that have been deleted
-      Object.keys(this.chats).forEach((friendId) => {
-        if (!newFriends.find((friend) => friend.id == friendId)) {
-          delete this.chats[friendId];
+      Object.keys(this.chats).forEach((chatKey) => {
+        if (
+          chatKey.startsWith("friend-") &&
+          !newFriends.find(
+            (friend) => friend.id == chatKey.replace("friend-", "")
+          )
+        ) {
+          delete this.chats[chatKey];
+        }
+      });
+      this.saveChats();
+    },
+    groups(newGroups) {
+      // Update chats for any new groups
+      newGroups.forEach((group) => {
+        if (!this.chats["group-" + group.id]) {
+          this.chats["group-" + group.id] = {
+            messages: [
+              {
+                sender: "bot",
+                text: `Start group chat with ${group.name}!`,
+              },
+            ],
+          };
+        }
+      });
+      // Remove chats for any groups that have been deleted
+      Object.keys(this.chats).forEach((chatKey) => {
+        if (
+          chatKey.startsWith("group-") &&
+          !newGroups.find(
+            (group) => group.id == chatKey.replace("group-", "")
+          )
+        ) {
+          delete this.chats[chatKey];
         }
       });
       this.saveChats();
@@ -199,6 +301,11 @@ export default {
   height: calc(100vh - 50px); /* Adjust if you have a navbar/footer */
   width: 100vw;
   overflow: hidden;
+}
+
+/* Sidebar Container */
+.sidebar-container {
+  display: flex;
 }
 
 /* Group Sidebar */
@@ -255,6 +362,16 @@ export default {
   background-color: #dee2e6;
 }
 
+/* Highlight Group Chat Card */
+.friend-card.group-chat {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.friend-card.group-chat.active {
+  background-color: #e0a800;
+}
+
 /* Chat Content */
 .chat-content {
   flex: 1;
@@ -262,12 +379,34 @@ export default {
   flex-direction: column;
 }
 
+.chat-content.fullWidth {
+  width: 100%;
+}
+
 .chat-header {
   background-color: #007bff;
   color: #ffffff;
   padding: 15px;
+  display: flex;
+  align-items: center;
 }
 
+.chat-header h2 {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+/* Chat History */
 .chat-history {
   flex: 1;
   padding: 20px;
