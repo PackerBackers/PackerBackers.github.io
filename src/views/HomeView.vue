@@ -2,7 +2,7 @@
   <div class="container about-page px-3 px-lg-5 pb-5">
     <!-- Welcome Banner with Placeholder Background -->
     <div class="welcome-banner text-center text-white py-5 my-5 rounded">
-      <h1 class="display-4 fw-bold">Welcome to TheHub!</h1>
+      <h1 class="display-4 fw-bold">Welcome to MapMingle!</h1>
     </div>
 
     <div class="row gy-4">
@@ -71,7 +71,7 @@
     <div class="text-center my-5">
       <RouterLink to="/friends">
         <button class="btn btn-primary btn-lg fw-bold shadow-sm px-4 py-3">
-          Add friends to get started with TheHub!
+          Add friends to get started with MapMingle!
         </button>
       </RouterLink>
     </div>
