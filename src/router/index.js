@@ -20,9 +20,9 @@ const router = createRouter({
       component: () => import('../views/ChatsView.vue')
     },
     {
-      path: '/maps',
-      name: 'map',
-      component: () => import('../views/MapView.vue')
+      path: '/map',
+      name: 'Map',
+      component: () => import('../views/MapPage.vue')
     }
   ]
 })
